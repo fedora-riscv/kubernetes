@@ -45,7 +45,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -1142,6 +1142,10 @@ fi
 
 ############################################
 %changelog
+* Thu Apr 26 2018 Jan Chaloupka <jchaloup@redhat.com> - 1.9.6-3
+- systemd dropin needs --bootstrap-kubeconfig
+  resolves: #1542476
+
 * Thu Apr 12 2018 Jan Chaloupka <jchaloup@redhat.com> - 1.9.6-2
 - Enable arm architecture
   resolves: #1566210
