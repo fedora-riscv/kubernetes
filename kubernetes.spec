@@ -23,7 +23,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  9f8ebd171479bec0ada837d7ee641dec2f8c6dd1
+%global commit                  d4ab47518836c750f9949b9e0d387f20fb92260b
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -35,7 +35,7 @@
 %global con_commit              5b445f1c53aa8d6457523526340077935f62e691
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
-%global kube_version            1.9.6
+%global kube_version            1.10.1
 %global kube_git_version        v%{kube_version}
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -45,7 +45,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        3%{?dist}
+Release:        0%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -1145,6 +1145,7 @@ fi
 * Thu Apr 26 2018 Jan Chaloupka <jchaloup@redhat.com> - 1.9.6-3
 - systemd dropin needs --bootstrap-kubeconfig
   resolves: #1542476
+- Update to v1.10.1
 
 * Thu Apr 12 2018 Jan Chaloupka <jchaloup@redhat.com> - 1.9.6-2
 - Enable arm architecture
