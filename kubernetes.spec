@@ -834,7 +834,12 @@ Kubernetes services for node host
 %package  kubeadm
 Summary:  Kubernetes tool for standing up clusters
 Requires: kubernetes-node = %{version}-%{release}
+
+%if 0%{?fedora}
 Requires: containernetworking-cni
+%else
+Requires: containernetworking-plugins
+%endif
 
 %description kubeadm
 Kubernetes tool for standing up clusters
