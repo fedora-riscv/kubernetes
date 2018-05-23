@@ -835,11 +835,7 @@ Kubernetes services for node host
 Summary:  Kubernetes tool for standing up clusters
 Requires: kubernetes-node = %{version}-%{release}
 
-%if 0%{?rhel} >= 7 && 0%{?centos} == 0
 Requires: containernetworking-plugins
-%else
-Requires: containernetworking-cni
-%endif
 
 %description kubeadm
 Kubernetes tool for standing up clusters
