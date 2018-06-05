@@ -23,7 +23,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  d4ab47518836c750f9949b9e0d387f20fb92260b
+%global commit                  2bba0127d85d5a46ab4b778548be28623b32d0b0
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -35,7 +35,7 @@
 %global con_commit              5b445f1c53aa8d6457523526340077935f62e691
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
-%global kube_version            1.10.1
+%global kube_version            1.10.3
 %global kube_git_version        v%{kube_version}
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -1143,6 +1143,9 @@ fi
 
 ############################################
 %changelog
+* Thu May 31 2018 Spyros Trigazis <spyridon.trigazis@cern.ch> - 1.10.3-0
+- Bump to upstream v1.10.3
+
 * Thu Apr 26 2018 Jan Chaloupka <jchaloup@redhat.com> - 1.9.6-3
 - systemd dropin needs --bootstrap-kubeconfig
   resolves: #1542476
