@@ -45,7 +45,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -1143,6 +1143,9 @@ fi
 
 ############################################
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.3-1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Thu May 31 2018 Spyros Trigazis <spyridon.trigazis@cern.ch> - 1.10.3-0
 - Bump to upstream v1.10.3
 
