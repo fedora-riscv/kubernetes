@@ -43,7 +43,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -390,6 +390,9 @@ fi
 
 ############################################
 %changelog
+* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Fri Jan 11 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.10.3-2
 - Remove unit-test subpackage
   resolves: #1546742
