@@ -21,7 +21,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  2bba0127d85d5a46ab4b778548be28623b32d0b0
+%global commit                  51dd616cdd25d6ee22c83a858773b607328a18ec
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -33,7 +33,7 @@
 %global con_commit              5b445f1c53aa8d6457523526340077935f62e691
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
-%global kube_version            1.10.3
+%global kube_version            1.12.5
 %global kube_git_version        v%{kube_version}
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -43,7 +43,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -61,8 +61,6 @@ Patch3:         build-with-debug-info.patch
 
 # ppc64le
 Patch16:        fix-support-for-ppc64le.patch
-
-Patch20:        use_go_build-is-not-fully-propagated-so-make-it-fixe.patch
 
 # It obsoletes cadvisor but needs its source code (literally integrated)
 Obsoletes:      cadvisor
@@ -154,8 +152,6 @@ Kubernetes client tools like kubectl
 %patch3 -p1
 %endif
 
-%patch20 -p1
-
 # copy contrib folder
 mkdir contrib
 cp -r ../%{con_repo}-%{con_commit}/init contrib/.
@@ -191,7 +187,7 @@ export KUBE_EXTRA_GOPATH=$(pwd)/Godeps/_workspace
 %ifarch ppc64le
 export GOLDFLAGS='-linkmode=external'
 %endif
-make WHAT="--use_go_build cmd/hyperkube cmd/kube-apiserver cmd/kubeadm"
+make WHAT="cmd/hyperkube cmd/kube-apiserver cmd/kubeadm"
 
 # convert md to man
 ./hack/generate-docs.sh || true
@@ -390,6 +386,10 @@ fi
 
 ############################################
 %changelog
+* Mon Feb 25 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.12.5-1
+- Update to v1.12.5 (Verify backend upgraded connection)
+  resolves: #1655686
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 

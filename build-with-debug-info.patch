@@ -1,6 +1,6 @@
-From c6b33500dd265875165a425da228106ea9fae7ed Mon Sep 17 00:00:00 2001
+From b02d3b74a43b5d7460e3f7e0a124d2f0d0fe332f Mon Sep 17 00:00:00 2001
 From: Jan Chaloupka <jchaloup@redhat.com>
-Date: Mon, 17 Jul 2017 08:47:32 +0200
+Date: Mon, 25 Feb 2019 20:13:35 +0100
 Subject: [PATCH] build with debug info
 
 ---
@@ -8,27 +8,27 @@ Subject: [PATCH] build with debug info
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/hack/lib/golang.sh b/hack/lib/golang.sh
-index b9649ce6d0..75faeeb6e8 100755
+index 9eb52a7..01501e7 100755
 --- a/hack/lib/golang.sh
 +++ b/hack/lib/golang.sh
-@@ -502,7 +502,7 @@ kube::golang::build_binaries_for_platform() {
-       CGO_ENABLED=0 go build -o "${outfile}" \
-         "${goflags[@]:+${goflags[@]}}" \
-         -gcflags "${gogcflags}" \
--        -ldflags "${goldflags}" \
-+        -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags}" \
-         "${binary}"
-       kube::log::progress "*"
-     done
-@@ -511,7 +511,7 @@ kube::golang::build_binaries_for_platform() {
-       go build -o "${outfile}" \
-         "${goflags[@]:+${goflags[@]}}" \
-         -gcflags "${gogcflags}" \
--        -ldflags "${goldflags}" \
-+        -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags}" \
-         "${binary}"
-       kube::log::progress "*"
-     done
+@@ -586,7 +586,7 @@ kube::golang::build_binaries_for_platform() {
+       -installsuffix static
+       ${goflags:+"${goflags[@]}"}
+       -gcflags "${gogcflags:-}"
+-      -ldflags "${goldflags:-}"
++      -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags:-}"
+     )
+     CGO_ENABLED=0 kube::golang::build_some_binaries "${statics[@]}"
+   fi
+@@ -595,7 +595,7 @@ kube::golang::build_binaries_for_platform() {
+     build_args=(
+       ${goflags:+"${goflags[@]}"}
+       -gcflags "${gogcflags:-}"
+-      -ldflags "${goldflags:-}"
++      -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags:-}"
+     )
+     kube::golang::build_some_binaries "${nonstatics[@]}"
+   fi
 -- 
 2.7.5
 
