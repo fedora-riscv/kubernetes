@@ -43,7 +43,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -98,7 +98,7 @@ Kubernetes services for master host
 Summary: Kubernetes services for node host
 
 %if 0%{?fedora} >= 27
-Requires: (docker or docker-ce)
+Requires: (docker or docker-ce or moby-engine or cri-o)
 Suggests: docker
 %else
 Requires: docker
@@ -386,6 +386,12 @@ fi
 
 ############################################
 %changelog
+* Tue Mar 05 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.12.5-2
+- Allow to install cri-o as alternative to docker
+  resolves: #1631053
+- Allow to install moby-engine as alternative to docker
+  resolves: #1683154
+
 * Mon Feb 25 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.12.5-1
 - Update to v1.12.5 (Verify backend upgraded connection)
   resolves: #1655686
