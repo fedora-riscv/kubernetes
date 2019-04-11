@@ -1,34 +1,43 @@
-From b02d3b74a43b5d7460e3f7e0a124d2f0d0fe332f Mon Sep 17 00:00:00 2001
+From ed6bae772c83e5bc73daec3bf9031ca235ce67e9 Mon Sep 17 00:00:00 2001
 From: Jan Chaloupka <jchaloup@redhat.com>
-Date: Mon, 25 Feb 2019 20:13:35 +0100
+Date: Thu, 11 Apr 2019 14:22:03 +0200
 Subject: [PATCH] build with debug info
 
 ---
- hack/lib/golang.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ hack/lib/golang.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/hack/lib/golang.sh b/hack/lib/golang.sh
-index 9eb52a7..01501e7 100755
+index 7ddc0bb..e00f26b 100755
 --- a/hack/lib/golang.sh
 +++ b/hack/lib/golang.sh
-@@ -586,7 +586,7 @@ kube::golang::build_binaries_for_platform() {
-       -installsuffix static
+@@ -601,7 +601,7 @@ kube::golang::build_binaries_for_platform() {
        ${goflags:+"${goflags[@]}"}
        -gcflags "${gogcflags:-}"
+       -asmflags "${goasmflags:-}"
 -      -ldflags "${goldflags:-}"
 +      -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags:-}"
      )
      CGO_ENABLED=0 kube::golang::build_some_binaries "${statics[@]}"
    fi
-@@ -595,7 +595,7 @@ kube::golang::build_binaries_for_platform() {
-     build_args=(
+@@ -611,7 +611,7 @@ kube::golang::build_binaries_for_platform() {
        ${goflags:+"${goflags[@]}"}
        -gcflags "${gogcflags:-}"
+       -asmflags "${goasmflags:-}"
 -      -ldflags "${goldflags:-}"
 +      -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags:-}"
      )
      kube::golang::build_some_binaries "${nonstatics[@]}"
    fi
+@@ -625,7 +625,7 @@ kube::golang::build_binaries_for_platform() {
+       ${goflags:+"${goflags[@]}"} \
+       -gcflags "${gogcflags:-}" \
+       -asmflags "${goasmflags:-}" \
+-      -ldflags "${goldflags:-}" \
++      -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') ${goldflags:-}" \
+       -o "${outfile}" \
+       "${testpkg}"
+   done
 -- 
 2.7.5
 

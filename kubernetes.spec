@@ -1,6 +1,6 @@
 %if 0%{?fedora}
 %global with_bundled 0
-%global with_debug   1
+%global with_debug   0
 %else
 %global with_bundled 1
 %global with_debug   0
@@ -21,7 +21,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  51dd616cdd25d6ee22c83a858773b607328a18ec
+%global commit                  2166946f41b36dea2c4626f90a77706f426cdea2
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -33,7 +33,7 @@
 %global con_commit              5b445f1c53aa8d6457523526340077935f62e691
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
-%global kube_version            1.12.5
+%global kube_version            1.13.5
 %global kube_git_version        v%{kube_version}
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -43,7 +43,7 @@
 ##############################################
 Name:           kubernetes
 Version:        %{kube_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -187,7 +187,12 @@ export KUBE_EXTRA_GOPATH=$(pwd)/Godeps/_workspace
 %ifarch ppc64le
 export GOLDFLAGS='-linkmode=external'
 %endif
-make WHAT="cmd/hyperkube cmd/kube-apiserver cmd/kubeadm"
+# Build each binary separately to generate a unique build-id.
+# Otherwise: Duplicate build-ids /builddir/build/BUILDROOT/kubernetes-1.13.5-1.fc31.x86_64/usr/bin/kube-apiserver and /builddir/build/BUILDROOT/kubernetes-1.13.5-1.fc31.x86_64/usr/bin/kubeadm
+make WHAT="cmd/hyperkube"
+make WHAT="cmd/kube-apiserver"
+make WHAT="cmd/kubeadm"
+
 
 # convert md to man
 ./hack/generate-docs.sh || true
@@ -363,7 +368,7 @@ getent passwd kube >/dev/null || useradd -r -g kube -d / -s /sbin/nologin \
 %systemd_preun kube-apiserver kube-scheduler kube-controller-manager
 
 %postun master
-%systemd_postun
+%systemd_postun kube-apiserver kube-scheduler kube-controller-manager
 
 
 %pre node
@@ -382,10 +387,14 @@ fi
 %systemd_preun kubelet kube-proxy
 
 %postun node
-%systemd_postun
+%systemd_postun kubelet kube-proxy
 
 ############################################
 %changelog
+* Thu Apr 11 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.13.5-1
+- Update to v1.13.5 (CVE-2019-1002101 - Mishandling of symlinks allows for arbitrary file write via `kubectl cp`)
+  resolves: #1693884
+
 * Tue Mar 05 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.12.5-2
 - Allow to install cri-o as alternative to docker
   resolves: #1631053
