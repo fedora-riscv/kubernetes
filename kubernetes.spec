@@ -1,10 +1,4 @@
-%if 0%{?fedora}
-%global with_bundled 0
 %global with_debug   0
-%else
-%global with_bundled 1
-%global with_debug   0
-%endif
 
 %if 0%{?with_debug}
 # https://bugzilla.redhat.com/show_bug.cgi?id=995136#c12
@@ -33,16 +27,13 @@
 %global con_commit              5b445f1c53aa8d6457523526340077935f62e691
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
-%global kube_version            1.13.5
-%global kube_git_version        v%{kube_version}
-
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
 %global _buildshell  /bin/bash
 %global _checkshell  /bin/bash
 
 ##############################################
 Name:           kubernetes
-Version:        %{kube_version}
+Version:        1.13.5
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -97,12 +88,8 @@ Kubernetes services for master host
 %package node
 Summary: Kubernetes services for node host
 
-%if 0%{?fedora} >= 27
 Requires: (docker or docker-ce or moby-engine or cri-o)
 Suggests: docker
-%else
-Requires: docker
-%endif
 Requires: conntrack-tools
 
 BuildRequires: golang >= 1.2-7
@@ -180,7 +167,7 @@ mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 pushd src/k8s.io/kubernetes/
 export KUBE_GIT_TREE_STATE="clean"
 export KUBE_GIT_COMMIT=%{commit}
-export KUBE_GIT_VERSION=%{kube_git_version}
+export KUBE_GIT_VERSION=v{version}
 export KUBE_EXTRA_GOPATH=$(pwd)/Godeps/_workspace
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1392922#c1
@@ -280,12 +267,10 @@ echo "******Benchmarking kube********"
 hack/benchmark-go.sh
 
 # In Fedora 20 and RHEL7 the go cover tools isn't available correctly
-%if 0%{?fedora} >= 21
 echo "******Testing the go code******"
 hack/test-go.sh
 echo "******Testing integration******"
 hack/test-integration.sh --use_go_build
-%endif
 fi
 
 ##############################################
