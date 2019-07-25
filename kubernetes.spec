@@ -34,7 +34,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.13.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -376,6 +376,9 @@ fi
 
 ############################################
 %changelog
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.13.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Thu Apr 11 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.13.5-1
 - Update to v1.13.5 (CVE-2019-1002101 - Mishandling of symlinks allows for arbitrary file write via `kubectl cp`)
   resolves: #1693884
