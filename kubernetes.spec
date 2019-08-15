@@ -55,7 +55,7 @@ Patch16:        fix-support-for-ppc64le.patch
 
 # CVE-2019-11250 kubernetes: Bearer tokens written to logs at high verbosity levels (>= 7)
 Patch17:        Hide-bearer-token-in-logs-upstream-81330.patch
-Patch18:        0001-Remove-go-mod.patch
+Patch18:        Remove-go-mod.patch
 
 # It obsoletes cadvisor but needs its source code (literally integrated)
 Obsoletes:      cadvisor
