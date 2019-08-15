@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  2166946f41b36dea2c4626f90a77706f426cdea2
+%global commit                  f6278300bebbb750328ac16ee6dd3aa7d3549568
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -33,8 +33,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.13.5
-Release:        2%{?dist}
+Version:        1.15.2
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -52,6 +52,10 @@ Patch3:         build-with-debug-info.patch
 
 # ppc64le
 Patch16:        fix-support-for-ppc64le.patch
+
+# CVE-2019-11250 kubernetes: Bearer tokens written to logs at high verbosity levels (>= 7)
+Patch17:        Hide-bearer-token-in-logs-upstream-81330.patch
+Patch18:        0001-Remove-go-mod.patch
 
 # It obsoletes cadvisor but needs its source code (literally integrated)
 Obsoletes:      cadvisor
@@ -160,6 +164,9 @@ mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 %ifarch ppc64le
 %patch16 -p1
 %endif
+
+%patch17 -p1
+%patch18 -p1
 
 ###############
 
@@ -376,6 +383,10 @@ fi
 
 ############################################
 %changelog
+* Thu Aug 15 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.15.2-1
+- Update to v1.15.2 (CVE-2019-11250 kubernetes: Bearer tokens written to logs at high verbosity levels (>= 7))
+  resolves: #1740435
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.13.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
