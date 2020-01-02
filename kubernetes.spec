@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  f6278300bebbb750328ac16ee6dd3aa7d3549568
+%global commit                  6c143d35bb11d74970e7bc0b6c45b6bfdffc0bd4
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -33,7 +33,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.15.2
+Version:        1.15.7
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -383,6 +383,10 @@ fi
 
 ############################################
 %changelog
+* Thu Jan 02 2020 Jan Chaloupka <jchaloup@redhat.com> - 1.15.7-1
+- Update to v1.15.7
+  resolves: #1784603
+
 * Thu Aug 15 2019 Jan Chaloupka <jchaloup@redhat.com> - 1.15.2-1
 - Update to v1.15.2 (CVE-2019-11250 kubernetes: Bearer tokens written to logs at high verbosity levels (>= 7))
   resolves: #1740435

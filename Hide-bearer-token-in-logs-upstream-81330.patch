@@ -1,12 +1,11 @@
-From 9bf2f8474f4ce9cf07a7deb10b7cc13769edca39 Mon Sep 17 00:00:00 2001
+From 2fce9e3eefd9dda6d74660ebe49f731f8b11111a Mon Sep 17 00:00:00 2001
 From: Jan Chaloupka <jchaloup@redhat.com>
-Date: Thu, 15 Aug 2019 14:46:11 +0200
+Date: Thu, 2 Jan 2020 12:29:57 +0100
 Subject: [PATCH] Hide bearer token in logs: upstream #81330
 
 ---
  .../k8s.io/client-go/transport/round_trippers.go   | 33 ++++++++++++++++++++++
- src/k8s.io/kubernetes/test/e2e/kubectl/kubectl.go  |  1 -
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ 1 file changed, 33 insertions(+)
 
 diff --git a/src/k8s.io/kubernetes/staging/src/k8s.io/client-go/transport/round_trippers.go b/src/k8s.io/kubernetes/staging/src/k8s.io/client-go/transport/round_trippers.go
 index 117a9c8..844ee9a 100644
@@ -59,18 +58,6 @@ index 117a9c8..844ee9a 100644
  				klog.Infof("    %s: %s", key, value)
  			}
  		}
-diff --git a/src/k8s.io/kubernetes/test/e2e/kubectl/kubectl.go b/src/k8s.io/kubernetes/test/e2e/kubectl/kubectl.go
-index 6f36a8a..154f2bf 100644
---- a/src/k8s.io/kubernetes/test/e2e/kubectl/kubectl.go
-+++ b/src/k8s.io/kubernetes/test/e2e/kubectl/kubectl.go
-@@ -718,7 +718,6 @@ metadata:
- 			framework.ExpectError(err)
- 			gomega.Expect(err).To(gomega.ContainSubstring("Using in-cluster namespace"))
- 			gomega.Expect(err).To(gomega.ContainSubstring("Using in-cluster configuration"))
--			gomega.Expect(err).To(gomega.ContainSubstring("Authorization: Bearer invalid"))
- 			gomega.Expect(err).To(gomega.ContainSubstring("Response Status: 401 Unauthorized"))
- 
- 			ginkgo.By("trying to use kubectl with invalid server")
 -- 
 2.7.5
 
