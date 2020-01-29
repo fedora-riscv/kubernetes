@@ -34,7 +34,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.15.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -383,6 +383,9 @@ fi
 
 ############################################
 %changelog
+* Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.15.7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Thu Jan 02 2020 Jan Chaloupka <jchaloup@redhat.com> - 1.15.7-1
 - Update to v1.15.7
   resolves: #1784603
