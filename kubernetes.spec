@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  6c143d35bb11d74970e7bc0b6c45b6bfdffc0bd4
+%global commit                  8d8aa39598534325ad77120c120a22b3a990b5ea
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 %global con_provider            github
@@ -24,7 +24,7 @@
 %global con_repo                contrib
 # https://github.com/kubernetes/contrib
 %global con_provider_prefix     %{con_provider}.%{con_provider_tld}/%{con_project}/%{con_repo}
-%global con_commit              5b445f1c53aa8d6457523526340077935f62e691
+%global con_commit              89f6948e24578fed2a90a87871b2263729f90ac3
 %global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -33,8 +33,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.15.7
-Release:        2%{?dist}
+Version:        1.17.4
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -47,15 +47,6 @@ Source4:        kubeadm.conf
 Source33:       genmanpages.sh
 
 Patch3:         build-with-debug-info.patch
-#Patch4:         make-test-cmd-run-over-hyperkube-based-kubectl.patch
-#Patch5:         make-e2e_node-run-over-distro-bins.patch
-
-# ppc64le
-Patch16:        fix-support-for-ppc64le.patch
-
-# CVE-2019-11250 kubernetes: Bearer tokens written to logs at high verbosity levels (>= 7)
-Patch17:        Hide-bearer-token-in-logs-upstream-81330.patch
-Patch18:        Remove-go-mod.patch
 
 # It obsoletes cadvisor but needs its source code (literally integrated)
 Obsoletes:      cadvisor
@@ -147,8 +138,10 @@ Kubernetes client tools like kubectl
 mkdir contrib
 cp -r ../%{con_repo}-%{con_commit}/init contrib/.
 
-#src/k8s.io/kubernetes/pkg/util/certificates
+# src/k8s.io/kubernetes/pkg/util/certificates
 # Patch the code to remove eliptic.P224 support
+# For whatever reason:
+# https://groups.google.com/forum/#!topic/Golang-nuts/Oq4rouLEvrU
 for dir in vendor/github.com/google/certificate-transparency/go/x509 pkg/util/certificates; do
   if [ -d "${dir}" ]; then
     pushd ${dir}
@@ -161,13 +154,6 @@ done
 mkdir -p src/k8s.io/kubernetes
 mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 
-%ifarch ppc64le
-%patch16 -p1
-%endif
-
-%patch17 -p1
-%patch18 -p1
-
 ###############
 
 %build
@@ -177,16 +163,15 @@ export KUBE_GIT_COMMIT=%{commit}
 export KUBE_GIT_VERSION=v{version}
 export KUBE_EXTRA_GOPATH=$(pwd)/Godeps/_workspace
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=1392922#c1
-%ifarch ppc64le
-export GOLDFLAGS='-linkmode=external'
-%endif
 # Build each binary separately to generate a unique build-id.
-# Otherwise: Duplicate build-ids /builddir/build/BUILDROOT/kubernetes-1.13.5-1.fc31.x86_64/usr/bin/kube-apiserver and /builddir/build/BUILDROOT/kubernetes-1.13.5-1.fc31.x86_64/usr/bin/kubeadm
-make WHAT="cmd/hyperkube"
+# Otherwise: Duplicate build-ids /builddir/build/BUILDROOT/.../usr/bin/kube-apiserver and /builddir/build/BUILDROOT/.../usr/bin/kubeadm
+make WHAT="cmd/kube-proxy"
 make WHAT="cmd/kube-apiserver"
+make WHAT="cmd/kube-controller-manager"
+make WHAT="cmd/kubelet"
 make WHAT="cmd/kubeadm"
-
+make WHAT="cmd/kube-scheduler"
+make WHAT="cmd/kubectl"
 
 # convert md to man
 ./hack/generate-docs.sh || true
@@ -213,22 +198,18 @@ output_path="${KUBE_OUTPUT_BINPATH}/$(kube::golang::host_platform)"
 
 install -m 755 -d %{buildroot}%{_bindir}
 
-echo "+++ INSTALLING hyperkube"
-install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/hyperkube
-
-echo "+++ INSTALLING kube-apiserver"
-install -p -m 754 -t %{buildroot}%{_bindir} ${output_path}/kube-apiserver
-
-echo "+++ INSTALLING kubeadm"
+echo "+++ INSTALLING binaries"
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-proxy
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-apiserver
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-controller-manager
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kubelet
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kubeadm
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-scheduler
+install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kubectl
+
+echo "+++ INSTALLING kubelet service unit"
 install -d -m 0755 %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d
 install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d %{SOURCE4}
-
-binaries=(kube-controller-manager kube-scheduler kube-proxy kubelet kubectl)
-for bin in "${binaries[@]}"; do
-  echo "+++ HARDLINKING ${bin} to hyperkube"
-  ln %{buildroot}%{_bindir}/hyperkube %{buildroot}%{_bindir}/${bin}
-done
 
 # install the bash completion
 install -d -m 0755 %{buildroot}%{_datadir}/bash-completion/completions/
@@ -245,7 +226,6 @@ install -m 0644 -t %{buildroot}%{_unitdir} contrib/init/systemd/*.service
 # install manpages
 install -d %{buildroot}%{_mandir}/man1
 install -p -m 644 docs/man/man1/* %{buildroot}%{_mandir}/man1
-rm %{buildroot}%{_mandir}/man1/cloud-controller-manager.*
 # from k8s tarball copied docs/man/man1/*.1
 
 # install the place the kubelet defaults to put volumes
@@ -294,7 +274,6 @@ fi
 %attr(754, -, kube) %caps(cap_net_bind_service=ep) %{_bindir}/kube-apiserver
 %{_bindir}/kube-controller-manager
 %{_bindir}/kube-scheduler
-%{_bindir}/hyperkube
 %{_unitdir}/kube-apiserver.service
 %{_unitdir}/kube-controller-manager.service
 %{_unitdir}/kube-scheduler.service
@@ -314,7 +293,6 @@ fi
 %{_mandir}/man1/kube-proxy.1*
 %{_bindir}/kubelet
 %{_bindir}/kube-proxy
-%{_bindir}/hyperkube
 %{_unitdir}/kube-proxy.service
 %{_unitdir}/kubelet.service
 %dir %{_sharedstatedir}/kubelet
@@ -322,6 +300,7 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/config
 %config(noreplace) %{_sysconfdir}/%{name}/kubelet
 %config(noreplace) %{_sysconfdir}/%{name}/proxy
+%config(noreplace) %{_sysconfdir}/%{name}/kubelet.kubeconfig
 %config(noreplace) %{_sysconfdir}/systemd/system.conf.d/kubernetes-accounting.conf
 %{_tmpfilesdir}/kubernetes.conf
 %verify(not size mtime md5) %attr(755, kube,kube) %dir /run/%{name}
@@ -343,7 +322,6 @@ fi
 %{_mandir}/man1/kubectl.1*
 %{_mandir}/man1/kubectl-*
 %{_bindir}/kubectl
-%{_bindir}/hyperkube
 %{_datadir}/bash-completion/completions/kubectl
 
 ##############################################
