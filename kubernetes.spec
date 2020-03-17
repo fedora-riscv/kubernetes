@@ -18,15 +18,6 @@
 %global commit                  8d8aa39598534325ad77120c120a22b3a990b5ea
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
-%global con_provider            github
-%global con_provider_tld        com
-%global con_project             kubernetes
-%global con_repo                contrib
-# https://github.com/kubernetes/contrib
-%global con_provider_prefix     %{con_provider}.%{con_provider_tld}/%{con_project}/%{con_repo}
-%global con_commit              89f6948e24578fed2a90a87871b2263729f90ac3
-%global con_shortcommit         %(c=%{con_commit}; echo ${c:0:7})
-
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
 %global _buildshell  /bin/bash
 %global _checkshell  /bin/bash
@@ -40,11 +31,24 @@ License:        ASL 2.0
 URL:            https://%{import_path}
 ExclusiveArch:  x86_64 aarch64 ppc64le s390x %{arm}
 Source0:        https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
-Source1:        https://%{con_provider_prefix}/archive/%{con_commit}/%{con_repo}-%{con_shortcommit}.tar.gz
-Source3:        kubernetes-accounting.conf
-Source4:        kubeadm.conf
 
-Source33:       genmanpages.sh
+Source101:      kube-proxy.service
+Source102:      kube-apiserver.service
+Source103:      kube-scheduler.service
+Source104:      kube-controller-manager.service
+Source105:      kubelet.service
+Source106:      environ-apiserver
+Source107:      environ-config
+Source108:      environ-controller-manager
+Source109:      environ-kubelet
+Source110:      environ-kubelet.kubeconfig
+Source111:      environ-proxy
+Source112:      environ-scheduler
+Source113:      kubernetes-accounting.conf
+Source114:      kubeadm.conf
+Source115:      kubernetes.conf
+
+Source200:      genmanpages.sh
 
 Patch3:         build-with-debug-info.patch
 
@@ -127,16 +131,11 @@ Kubernetes client tools like kubectl
 ##############################################
 
 %prep
-%setup -q -n %{con_repo}-%{con_commit} -T -b 1
 %setup -q -n %{repo}-%{commit}
 
 %if 0%{?with_debug}
 %patch3 -p1
 %endif
-
-# copy contrib folder
-mkdir contrib
-cp -r ../%{con_repo}-%{con_commit}/init contrib/.
 
 # src/k8s.io/kubernetes/pkg/util/certificates
 # Patch the code to remove eliptic.P224 support
@@ -179,7 +178,7 @@ pushd docs
 pushd admin
 cp kube-apiserver.md kube-controller-manager.md kube-proxy.md kube-scheduler.md kubelet.md ..
 popd
-cp %{SOURCE33} genmanpages.sh
+cp %{SOURCE200} genmanpages.sh
 bash genmanpages.sh
 popd
 popd
@@ -196,9 +195,8 @@ output_path="_output/local/go/bin"
 output_path="${KUBE_OUTPUT_BINPATH}/$(kube::golang::host_platform)"
 %endif
 
-install -m 755 -d %{buildroot}%{_bindir}
-
 echo "+++ INSTALLING binaries"
+install -m 755 -d %{buildroot}%{_bindir}
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-proxy
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-apiserver
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-controller-manager
@@ -207,39 +205,52 @@ install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kubeadm
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kube-scheduler
 install -p -m 755 -t %{buildroot}%{_bindir} ${output_path}/kubectl
 
-echo "+++ INSTALLING kubelet service unit"
+echo "+++ INSTALLING kubelet service config"
 install -d -m 0755 %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d
-install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d %{SOURCE4}
+install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d %{SOURCE114}
 
-# install the bash completion
+echo "+++ INSTALLING bash completion"
 install -d -m 0755 %{buildroot}%{_datadir}/bash-completion/completions/
 %{buildroot}%{_bindir}/kubectl completion bash > %{buildroot}%{_datadir}/bash-completion/completions/kubectl
 
-# install config files
+echo "+++ INSTALLING config files"
+%define remove_environ_prefix() %(echo -n %1|sed 's/.*environ-//g')
 install -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}
-install -m 644 -t %{buildroot}%{_sysconfdir}/%{name} contrib/init/systemd/environ/*
+install -d -m 0700 %{buildroot}%{_sysconfdir}/%{name}/manifests
+install -m 644 -T %{SOURCE106} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE106}}
+install -m 644 -T %{SOURCE107} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE107}}
+install -m 644 -T %{SOURCE108} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE108}}
+install -m 644 -T %{SOURCE109} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE109}}
+install -m 644 -T %{SOURCE110} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE110}}
+install -m 644 -T %{SOURCE111} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE111}}
+install -m 644 -T %{SOURCE112} %{buildroot}%{_sysconfdir}/%{name}/%{remove_environ_prefix %{SOURCE112}}
 
-# install service files
-install -d -m 0755 %{buildroot}%{_unitdir}
-install -m 0644 -t %{buildroot}%{_unitdir} contrib/init/systemd/*.service
-
-# install manpages
-install -d %{buildroot}%{_mandir}/man1
-install -p -m 644 docs/man/man1/* %{buildroot}%{_mandir}/man1
-# from k8s tarball copied docs/man/man1/*.1
-
-# install the place the kubelet defaults to put volumes
-install -d %{buildroot}%{_sharedstatedir}/kubelet
-
-# place contrib/init/systemd/tmpfiles.d/kubernetes.conf to /usr/lib/tmpfiles.d/kubernetes.conf
+# place systemd/tmpfiles.d/kubernetes.conf to /usr/lib/tmpfiles.d/kubernetes.conf
 install -d -m 0755 %{buildroot}%{_tmpfilesdir}
-install -p -m 0644 -t %{buildroot}/%{_tmpfilesdir} contrib/init/systemd/tmpfiles.d/kubernetes.conf
-mkdir -p %{buildroot}/run
-install -d -m 0755 %{buildroot}/run/%{name}/
+install -p -m 0644 -t %{buildroot}/%{_tmpfilesdir} %{SOURCE115}
 
 # enable CPU and Memory accounting
 install -d -m 0755 %{buildroot}/%{_sysconfdir}/systemd/system.conf.d
-install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system.conf.d %{SOURCE3}
+install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system.conf.d %{SOURCE113}
+
+echo "+++ INSTALLING service files"
+install -d -m 0755 %{buildroot}%{_unitdir}
+install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE101}
+install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE102}
+install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE103}
+install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE104}
+install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE105}
+
+echo "+++ INSTALLING manpages"
+install -d %{buildroot}%{_mandir}/man1
+# from k8s tarball copied docs/man/man1/*.1
+install -p -m 644 docs/man/man1/* %{buildroot}%{_mandir}/man1
+
+# install the place the kubelet defaults to put volumes and default folder structure
+install -d %{buildroot}%{_sharedstatedir}/kubelet
+
+mkdir -p %{buildroot}/run
+install -d -m 0755 %{buildroot}/run/%{name}/
 
 popd
 
@@ -297,6 +308,7 @@ fi
 %{_unitdir}/kubelet.service
 %dir %{_sharedstatedir}/kubelet
 %dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/manifests
 %config(noreplace) %{_sysconfdir}/%{name}/config
 %config(noreplace) %{_sysconfdir}/%{name}/kubelet
 %config(noreplace) %{_sysconfdir}/%{name}/proxy
