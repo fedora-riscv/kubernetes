@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  8d8aa39598534325ad77120c120a22b3a990b5ea
+%global commit                  52c56ce7a8272c798dbc29846288d7cd9fbae032
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.17.4
+Version:        1.18.2
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -373,6 +373,12 @@ fi
 
 ############################################
 %changelog
+* Fri May 15 2020 Kairui Song <ryncsn@gmail.com> - 1.18.2-1
+- Update to v1.18.2
+- Update service file and config file
+- "contrib" is EOL, move files into this repo
+- Update the build steps to fit latest upstream
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.15.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
