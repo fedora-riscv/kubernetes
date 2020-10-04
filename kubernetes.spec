@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  52c56ce7a8272c798dbc29846288d7cd9fbae032
+%global commit                  1e11e4a2108024935ecfcb2912226cedeafd99df
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.18.2
-Release:        2%{?dist}
+Version:        1.19.3
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -47,8 +47,6 @@ Source112:      environ-scheduler
 Source113:      kubernetes-accounting.conf
 Source114:      kubeadm.conf
 Source115:      kubernetes.conf
-
-Source200:      genmanpages.sh
 
 Patch3:         build-with-debug-info.patch
 
@@ -157,6 +155,9 @@ mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 
 %build
 pushd src/k8s.io/kubernetes/
+source hack/lib/init.sh
+kube::golang::setup_env
+
 export KUBE_GIT_TREE_STATE="clean"
 export KUBE_GIT_COMMIT=%{commit}
 export KUBE_GIT_VERSION=v{version}
@@ -172,21 +173,16 @@ make WHAT="cmd/kubeadm"
 make WHAT="cmd/kube-scheduler"
 make WHAT="cmd/kubectl"
 
-# convert md to man
-./hack/generate-docs.sh || true
-pushd docs
-pushd admin
-cp kube-apiserver.md kube-controller-manager.md kube-proxy.md kube-scheduler.md kubelet.md ..
-popd
-cp %{SOURCE200} genmanpages.sh
-bash genmanpages.sh
-popd
-popd
+# Gen docs
+make WHAT="cmd/gendocs"
+make WHAT="cmd/genkubedocs"
+make WHAT="cmd/genman"
+make WHAT="cmd/genyaml"
+kube::util::gen-docs .
 
 %install
-
 pushd src/k8s.io/kubernetes/
-. hack/lib/init.sh
+source hack/lib/init.sh
 kube::golang::setup_env
 
 %ifarch ppc64le
@@ -244,14 +240,13 @@ install -m 0644 -t %{buildroot}%{_unitdir} %{SOURCE105}
 echo "+++ INSTALLING manpages"
 install -d %{buildroot}%{_mandir}/man1
 # from k8s tarball copied docs/man/man1/*.1
-install -p -m 644 docs/man/man1/* %{buildroot}%{_mandir}/man1
+install -p -m 644 docs/man/man1/*.1 %{buildroot}%{_mandir}/man1
 
 # install the place the kubelet defaults to put volumes and default folder structure
 install -d %{buildroot}%{_sharedstatedir}/kubelet
 
 mkdir -p %{buildroot}/run
 install -d -m 0755 %{buildroot}/run/%{name}/
-
 popd
 
 mv src/k8s.io/kubernetes/*.md .
