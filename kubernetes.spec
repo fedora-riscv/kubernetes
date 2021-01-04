@@ -368,6 +368,9 @@ fi
 
 ############################################
 %changelog
+* Mon Jan 04 2021 Kairui Song <ryncsn@gmail.com> - 1.19.3-1
+- Update to v1.19.3
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.18.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
