@@ -122,6 +122,7 @@ Summary: Kubernetes client tools
 
 BuildRequires: golang >= 1.2-7
 BuildRequires: go-bindata
+BuildRequires: make
 
 %description client
 Kubernetes client tools like kubectl
