@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  1e11e4a2108024935ecfcb2912226cedeafd99df
+%global commit                  fbf646b339dc52336b55d8ec85c181981b86331a
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.19.3
+Version:        1.19.6
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Mon Jan 04 2021 Matthias Runge <mrunge@redhat.com> - 1.19.6-1
+- Update to v1.19.6
+
 * Mon Jan 04 2021 Kairui Song <ryncsn@gmail.com> - 1.19.3-1
 - Update to v1.19.3
 
