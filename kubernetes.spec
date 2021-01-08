@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.19.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Fri Jan 08 2021 Kairui Song <ryncsn@gmail.com> - 1.19.6-2
+- Fix missing --kubeconfig in KUBELET_KUBECONFIG env
+  resolves: #1902518
+
 * Mon Jan 04 2021 Matthias Runge <mrunge@redhat.com> - 1.19.6-1
 - Update to v1.19.6
 
