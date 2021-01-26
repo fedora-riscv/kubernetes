@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.19.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.19.6-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Jan 08 2021 Kairui Song <ryncsn@gmail.com> - 1.19.6-2
 - Fix missing --kubeconfig in KUBELET_KUBECONFIG env
   resolves: #1902518
