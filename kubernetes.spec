@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  fbf646b339dc52336b55d8ec85c181981b86331a
+%global commit                  6b1d87acf3c8253c123756b9e61dac642678305f
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.19.6
-Release:        3%{?dist}
+Version:        1.20.5
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -65,7 +65,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for master host
 
-BuildRequires: golang >= 1.2-7
+BuildRequires: golang >= 1.15
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -85,11 +85,11 @@ Kubernetes services for master host
 %package node
 Summary: Kubernetes services for node host
 
-Requires: (docker or docker-ce or moby-engine or cri-o)
-Suggests: docker
+Requires: (containerd or cri-o or docker or docker-ce or moby-engine)
+Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.2-7
+BuildRequires: golang >= 1.15
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -120,7 +120,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.2-7
+BuildRequires: golang >= 1.15
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Tue Mar 30 2021 Neal Gompa <ngompa13@gmail.com> - 1.20.5-1
+- Rebase to 1.20.5
+- Update node subpackage to correct CRI options
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.19.6-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
