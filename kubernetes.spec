@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  6b1d87acf3c8253c123756b9e61dac642678305f
+%global commit                  cb303e613a121a29364f75cc67d3d580833a7479
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.20.5
+Version:        1.21.0
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Wed May 12 2021 Jan Chaloupka <jchaloup@redhat.com> - 1.21.0-1
+- Update to 1.21.0
+  resolves: #1959262
+
 * Tue Mar 30 2021 Neal Gompa <ngompa13@gmail.com> - 1.20.5-1
 - Rebase to 1.20.5
 - Update node subpackage to correct CRI options
