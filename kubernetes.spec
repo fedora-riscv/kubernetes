@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  cb303e613a121a29364f75cc67d3d580833a7479
+%global commit                  b56e432f2191419647a6a13b9f5867801850f969
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.21.0
-Release:        3%{?dist}
+Version:        1.22.7
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Tue Mar 01 2022 Jan Chaloupka <jchaloup@redhat.com> - 1.22.7-1
+- Update to 1.22.7
+  resolves: #2059662
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.21.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
