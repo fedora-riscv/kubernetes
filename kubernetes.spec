@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  ad3338546da947756e8a88aa6822e9c11e7eac22
+%global commit                  4ce5a8954017644c5420bae81d72b09b735c21f0
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.23.6
+Version:        1.24.0
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -89,7 +89,7 @@ Requires: (containerd or cri-o or docker or docker-ce or moby-engine)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.18.1
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -120,7 +120,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.18.1
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Sun May 08 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.0-1
+- Update to 1.24.0
+
 * Sun May 08 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.23.6-1
 - Update to 1.23.6
   resolves: #2082978
