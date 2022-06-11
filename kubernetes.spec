@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  4ce5a8954017644c5420bae81d72b09b735c21f0
+%global commit                  3ddd0f45aa91e2f30c70734b175631bec5b5825a
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.0
+Version:        1.24.1
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Fri Jun 10 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-1
+- Update to 1.24.1
+
 * Sun May 08 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.0-1
 - Update to 1.24.0
 
