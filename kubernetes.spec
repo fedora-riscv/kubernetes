@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Sat Jun 18 2022 Robert-André Mauchin <zebob.m@gmail.com> - 1.24.1-2
+- Rebuilt for CVE-2022-1996, CVE-2022-24675, CVE-2022-28327, CVE-2022-27191,
+  CVE-2022-29526, CVE-2022-30629
+
 * Fri Jun 10 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-1
 - Update to 1.24.1
 
