@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.23.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Sat Jul 09 2022 Maxwell G <gotmax@e.email> - 1.23.6-2
+- Rebuild for CVE-2022-{24675,28327,29526} in golang
+
 * Sun May 08 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.23.6-1
 - Update to 1.23.6
   resolves: #2082978
