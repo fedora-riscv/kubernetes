@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -369,6 +369,9 @@ fi
 
 ############################################
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.24.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Tue Jul 19 2022 Maxwell G <gotmax@e.email> - 1.24.1-3
 - Rebuild for CVE-2022-{1705,32148,30631,30633,28131,30635,30632,30630,1962} in
   golang
