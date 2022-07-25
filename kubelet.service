@@ -1,7 +1,7 @@
 [Unit]
 Description=Kubernetes Kubelet Server
 Documentation=https://kubernetes.io/docs/concepts/overview/components/#kubelet https://kubernetes.io/docs/reference/generated/kubelet/
-After=containerd.service crio.service docker.service
+After=containerd.service crio.service
 
 [Service]
 WorkingDirectory=/var/lib/kubelet

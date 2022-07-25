@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -85,7 +85,7 @@ Kubernetes services for master host
 %package node
 Summary: Kubernetes services for node host
 
-Requires: (containerd or cri-o or docker or docker-ce or moby-engine)
+Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
@@ -357,7 +357,7 @@ getent passwd kube >/dev/null || useradd -r -g kube -d / -s /sbin/nologin \
 %post node
 %systemd_post kubelet kube-proxy
 # If accounting is not currently enabled systemd reexec
-if [[ `systemctl show docker kubelet | grep -q -e CPUAccounting=no -e MemoryAccounting=no; echo $?` -eq 0 ]]; then
+if [[ `systemctl show kubelet | grep -q -e CPUAccounting=no -e MemoryAccounting=no; echo $?` -eq 0 ]]; then
   systemctl daemon-reexec
 fi
 
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-5
+- Remove docker suggestions and related known arguments since it's removed upstream.
+  resolves: #2110180
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.24.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
