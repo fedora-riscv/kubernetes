@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
