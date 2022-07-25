@@ -207,9 +207,13 @@ echo "+++ INSTALLING kubelet service config"
 install -d -m 0755 %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d
 install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system/kubelet.service.d %{SOURCE114}
 
-echo "+++ INSTALLING bash completion"
+echo "+++ INSTALLING shell completion"
 install -d -m 0755 %{buildroot}%{_datadir}/bash-completion/completions/
 %{buildroot}%{_bindir}/kubectl completion bash > %{buildroot}%{_datadir}/bash-completion/completions/kubectl
+install -d -m 0755 %{buildroot}%{_datadir}/zsh-completion/completions/
+%{buildroot}%{_bindir}/kubectl completion zsh > %{buildroot}%{_datadir}/zsh-completion/completions/kubectl
+install -d -m 0755 %{buildroot}%{_datadir}/fish-completion/completions/
+%{buildroot}%{_bindir}/kubectl completion fish > %{buildroot}%{_datadir}/fish-completion/completions/kubectl
 
 echo "+++ INSTALLING config files"
 %define remove_environ_prefix() %(echo -n %1|sed 's/.*environ-//g')
@@ -337,6 +341,8 @@ fi
 %{_mandir}/man1/kubectl-*
 %{_bindir}/kubectl
 %{_datadir}/bash-completion/completions/kubectl
+%{_datadir}/zsh-completion/completions/kubectl
+%{_datadir}/fish-completion/completions/kubectl
 
 ##############################################
 
@@ -371,6 +377,9 @@ fi
 
 ############################################
 %changelog
+* Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-7
+- Add kubectl completions for zsh, and fish
+
 * Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-6
 - Kube user now takes advantage of systemd-sysusers instead of useradd
   resolves: #2095427
