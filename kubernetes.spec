@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -47,6 +47,7 @@ Source112:      environ-scheduler
 Source113:      kubernetes-accounting.conf
 Source114:      kubeadm.conf
 Source115:      kubernetes.conf
+Source116:      %{name}.sysusers
 
 Patch3:         build-with-debug-info.patch
 
@@ -226,6 +227,9 @@ install -m 644 -T %{SOURCE112} %{buildroot}%{_sysconfdir}/%{name}/%{remove_envir
 install -d -m 0755 %{buildroot}%{_tmpfilesdir}
 install -p -m 0644 -t %{buildroot}/%{_tmpfilesdir} %{SOURCE115}
 
+echo "+++ INSTALLING sysusers.d"
+install -D -m644 -vp %{SOURCE116}       %{buildroot}%{_sysusersdir}/%{name}.conf
+
 # enable CPU and Memory accounting
 install -d -m 0755 %{buildroot}/%{_sysconfdir}/systemd/system.conf.d
 install -p -m 0644 -t %{buildroot}/%{_sysconfdir}/systemd/system.conf.d %{SOURCE113}
@@ -284,6 +288,7 @@ fi
 %{_unitdir}/kube-apiserver.service
 %{_unitdir}/kube-controller-manager.service
 %{_unitdir}/kube-scheduler.service
+%{_sysusersdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/apiserver
 %config(noreplace) %{_sysconfdir}/%{name}/scheduler
@@ -302,6 +307,7 @@ fi
 %{_bindir}/kube-proxy
 %{_unitdir}/kube-proxy.service
 %{_unitdir}/kubelet.service
+%{_sysusersdir}/%{name}.conf
 %dir %{_sharedstatedir}/kubelet
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/manifests
@@ -335,9 +341,7 @@ fi
 ##############################################
 
 %pre master
-getent group kube >/dev/null || groupadd -r kube
-getent passwd kube >/dev/null || useradd -r -g kube -d / -s /sbin/nologin \
-        -c "Kubernetes user" kube
+%sysusers_create_compat %{SOURCE116}
 
 %post master
 %systemd_post kube-apiserver kube-scheduler kube-controller-manager
@@ -350,9 +354,7 @@ getent passwd kube >/dev/null || useradd -r -g kube -d / -s /sbin/nologin \
 
 
 %pre node
-getent group kube >/dev/null || groupadd -r kube
-getent passwd kube >/dev/null || useradd -r -g kube -d / -s /sbin/nologin \
-        -c "Kubernetes user" kube
+%sysusers_create_compat %{SOURCE116}
 
 %post node
 %systemd_post kubelet kube-proxy
@@ -369,6 +371,10 @@ fi
 
 ############################################
 %changelog
+* Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-6
+- Kube user now takes advantage of systemd-sysusers instead of useradd
+  resolves: #2095427
+
 * Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-5
 - Remove docker suggestions and related known arguments since it's removed upstream.
   resolves: #2110180
