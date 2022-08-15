@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  3ddd0f45aa91e2f30c70734b175631bec5b5825a
+%global commit                  aef86a93758dc3cb2c658dd9657ab4ad4afc21cb
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.1
-Release:        7%{?dist}
+Version:        1.24.3
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for master host
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.18.3
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.1
+BuildRequires: golang >= 1.18.3
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -121,7 +121,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.1
+BuildRequires: golang >= 1.18.3
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -377,6 +377,9 @@ fi
 
 ############################################
 %changelog
+* Sun Aug 14 2022 Bradley G Smith <bradley.g.smith@gmail.com>> - 1.24.3-1
+- Update to 1.24.3
+
 * Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-7
 - Add kubectl completions for zsh, and fish
 
@@ -515,6 +518,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Sun Aug 14 2022 Bradley G Smith <bradley.g.smith@gmail.com>> - 1.24.3-1
+- Update to 1.24.3
+
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
