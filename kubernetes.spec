@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -258,8 +258,10 @@ mkdir -p %{buildroot}/run
 install -d -m 0755 %{buildroot}/run/%{name}/
 popd
 
+mv src/k8s.io/kubernetes/CHANGELOG/CHANGELOG-*.md .
 mv src/k8s.io/kubernetes/*.md .
 mv src/k8s.io/kubernetes/LICENSE .
+rm CHANGELOG.md
 
 %check
 if [ 1 != 1 ]; then
@@ -377,7 +379,10 @@ fi
 
 ############################################
 %changelog
-* Sun Aug 14 2022 Bradley G Smith <bradley.g.smith@gmail.com>> - 1.24.3-1
+* Tue Aug 16 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-2
+- Resolve missing CHANGELOG
+
+* Sun Aug 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-1
 - Update to 1.24.3
 
 * Mon Jul 25 2022 Anthony Rabbito <hello@anthonyrabbito.com> - 1.24.1-7
@@ -801,7 +806,7 @@ fi
   related: #1211266
 
 * Fri Oct 09 2015 jchaloup <jchaloup@redhat.com> - 1.1.0-0.39.alpha1.git5f38cb0
-- Add normalization of flags 
+- Add normalization of flags
   related: #1211266
 
 * Fri Oct 02 2015 jchaloup <jchaloup@redhat.com> - 1.1.0-0.38.alpha1.git5f38cb0
