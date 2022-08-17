@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -113,6 +113,7 @@ Summary:  Kubernetes tool for standing up clusters
 Requires: kubernetes-node = %{version}-%{release}
 
 Requires: containernetworking-plugins
+Requires: cri-tools
 
 %description kubeadm
 Kubernetes tool for standing up clusters
@@ -261,6 +262,8 @@ popd
 mv src/k8s.io/kubernetes/CHANGELOG/CHANGELOG-*.md .
 mv src/k8s.io/kubernetes/*.md .
 mv src/k8s.io/kubernetes/LICENSE .
+# CHANGELOG.md is symlink to CHANGELOG/README.md and not actual
+# change log. no need to include generated rpms
 rm CHANGELOG.md
 
 %check
@@ -379,6 +382,9 @@ fi
 
 ############################################
 %changelog
+* Wed Aug 17 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-3
+- kubeadm now requires cri-tools. Resolves #2110153
+
 * Tue Aug 16 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-2
 - Resolve missing CHANGELOG
 
