@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  aef86a93758dc3cb2c658dd9657ab4ad4afc21cb
+%global commit                  95ee5ab382d64cfe6c28967f36b53970b8374491
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.3
-Release:        3%{?dist}
+Version:        1.24.4
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -64,9 +64,9 @@ Requires: kubernetes-node = %{version}-%{release}
 
 ##############################################
 %package master
-Summary: Kubernetes services for master host
+Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.18.3
+BuildRequires: golang >= 1.18.5
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -80,17 +80,17 @@ Conflicts: kubernetes-node < %{version}-%{release}
 Conflicts: kubernetes-node > %{version}-%{release}
 
 %description master
-Kubernetes services for master host
+Kubernetes services for control plane host
 
 ##############################################
 %package node
-Summary: Kubernetes services for node host
+Summary: Kubernetes services for worker node host
 
 Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.3
+BuildRequires: golang >= 1.18.5
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -105,7 +105,7 @@ Conflicts: kubernetes-master < %{version}-%{release}
 Conflicts: kubernetes-master > %{version}-%{release}
 
 %description node
-Kubernetes services for node host
+Kubernetes services for worker node host
 
 ##############################################
 %package  kubeadm
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.3
+BuildRequires: golang >= 1.18.5
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -382,6 +382,13 @@ fi
 
 ############################################
 %changelog
+* Thu Aug 18 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.4-1
+- Update to 1.24.4
+
+* Thu Aug 18 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-4
+- Update master description to control plane
+- Update node description to worker node
+
 * Wed Aug 17 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.3-3
 - kubeadm now requires cri-tools. Resolves #2110153
 
@@ -529,6 +536,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Thu Aug 18 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.4-1
+- Update to 1.24.4
+
 * Sun Aug 14 2022 Bradley G Smith <bradley.g.smith@gmail.com>> - 1.24.3-1
 - Update to 1.24.3
 
