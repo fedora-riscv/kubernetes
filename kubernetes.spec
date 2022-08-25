@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  95ee5ab382d64cfe6c28967f36b53970b8374491
+%global commit                  a866cbe2e5bbaa01cfd5e969aa3e033f3282a8a2
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.4
+Version:        1.25.0
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.19
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.19
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.19
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -305,6 +305,7 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/controller-manager
 %{_tmpfilesdir}/kubernetes.conf
 %verify(not size mtime md5) %attr(755, kube,kube) %dir /run/%{name}
+%verify(not size mtime md5) %attr(755, kube,kube) %dir /run/%{name}
 
 ##############################################
 %files node
@@ -382,6 +383,10 @@ fi
 
 ############################################
 %changelog
+* Wed Aug 24 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.0-1
+- Update to 1.25.0. Resolves #2120898
+- Built with golang 1.19
+
 * Thu Aug 18 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.4-1
 - Update to 1.24.4
 
@@ -536,6 +541,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Wed Aug 24 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.0-1
+- Update to 1.25.0
+
 * Thu Aug 18 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.4-1
 - Update to 1.24.4
 
