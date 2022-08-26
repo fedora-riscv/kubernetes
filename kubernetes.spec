@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.25.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -305,7 +305,6 @@ fi
 %config(noreplace) %{_sysconfdir}/%{name}/controller-manager
 %{_tmpfilesdir}/kubernetes.conf
 %verify(not size mtime md5) %attr(755, kube,kube) %dir /run/%{name}
-%verify(not size mtime md5) %attr(755, kube,kube) %dir /run/%{name}
 
 ##############################################
 %files node
@@ -383,6 +382,9 @@ fi
 
 ############################################
 %changelog
+* Fri Aug 26 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.0-2
+- Removed duplicate entry for /run/kubernetes
+
 * Wed Aug 24 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.0-1
 - Update to 1.25.0. Resolves #2120898
 - Built with golang 1.19
