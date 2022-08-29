@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  ad3338546da947756e8a88aa6822e9c11e7eac22
+%global commit                  a43c0904d0de10f92aa3956c74489c45e6453d6e
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.23.6
-Release:        3%{?dist}
+Version:        1.22.13
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -65,7 +65,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for master host
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.16.15
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -89,7 +89,7 @@ Requires: (containerd or cri-o or docker or docker-ce or moby-engine)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.16.15
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -120,7 +120,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.15
+BuildRequires: golang >= 1.16.15
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -369,6 +369,10 @@ fi
 
 ############################################
 %changelog
+* Sun Aug 28 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.22.13-1
+- Update to 1.22.13
+- Revert to 1.22 upstream as 1.23 requires golang 1.17
+
 * Sat Jul 09 2022 Maxwell G <gotmax@e.email> - 1.23.6-3
 - Rebuild for CVE-2022-{24675,28327,29526 in golang}
 
@@ -485,6 +489,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Sun Aug 28 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.22.13-1
+- Update to 1.22.13
+
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
@@ -765,7 +772,7 @@ fi
   related: #1211266
 
 * Fri Oct 09 2015 jchaloup <jchaloup@redhat.com> - 1.1.0-0.39.alpha1.git5f38cb0
-- Add normalization of flags 
+- Add normalization of flags
   related: #1211266
 
 * Fri Oct 02 2015 jchaloup <jchaloup@redhat.com> - 1.1.0-0.38.alpha1.git5f38cb0
