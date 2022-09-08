@@ -6,7 +6,7 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 
 |Supported Kubernetes Version | Planned End of Life |
 | :--- | ---: |
-| 1.25 | 2023-10-27 |
+| 1.25 | 2023.10.27 |
 | 1.24   | 2023.07.28 |
 | 1.23 | 2023.02.28 |
 | 1.22 | 2022.10.28 |
