@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  e979822c185a14537054f15808a118d7fcce1d6e
+%global commit                  b39bf148cd654599a52e867485c02c4f9d28b312
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.5
+Version:        1.24.6
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -382,6 +382,9 @@ fi
 
 ############################################
 %changelog
+* Wed Sep 21 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.6-1
+- Update to 1.24.6
+
 * Fri Sep 16 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.5-1
 - Update to 1.24.5
 - Resolves, in part, #2127366
@@ -422,7 +425,7 @@ fi
 - Rebuild for CVE-2022-{1705,32148,30631,30633,28131,30635,30632,30630,1962} in
   golang
 
-* Sat Jun 18 2022 Robert-André Mauchin <zebob.m@gmail.com> - 1.24.1-2
+* Sat Jun 18 2022 Robert-AndrĂ© Mauchin <zebob.m@gmail.com> - 1.24.1-2
 - Rebuilt for CVE-2022-1996, CVE-2022-24675, CVE-2022-28327, CVE-2022-27191,
   CVE-2022-29526, CVE-2022-30629
 
@@ -1661,3 +1664,4 @@ https://fedoraproject.org/wiki/Packaging:SourceURL#Github
 
 * Wed Jul 16 2014 Colin Walters <walters@redhat.com>
 - Initial package
+
