@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  b39bf148cd654599a52e867485c02c4f9d28b312
+%global commit                  e6f35974b08862a23e7f4aad8e5d7f7f2de26c15
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.6
+Version:        1.24.7
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -382,6 +382,9 @@ fi
 
 ############################################
 %changelog
+* Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.7-1
+- Update to 1.24.7. Resolves, in part, #2134622
+
 * Wed Sep 21 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.6-1
 - Update to 1.24.6
 
@@ -545,6 +548,12 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.7-1
+- Update to 1.24.7
+
+* Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.3-1
+- Update to 1.25.3
+
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
