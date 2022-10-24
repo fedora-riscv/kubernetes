@@ -11,5 +11,7 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 | 1.23 | 2023.02.28 | 1.17 |
 | 1.22 | 2022.10.28 | 1.16 |
 
+Kubernetes 1.23 did not make it into an official Fedora package. Unofficial packages for Fedora 36 and Fedora 37 can be found in COPR at https://copr.fedorainfracloud.org/coprs/buckaroogeek/copr-k8s-1.23/.
+
 As of August 2022, there is a project to redesign the kubernetes spec file. The repository for this project is at https://github.com/buckaroogeek/copr-k8s-refresh. The corresponding COPR site is https://copr.fedorainfracloud.org/coprs/buckaroogeek/Kubernetes-Refresh/. The existing spec file includes several software components that are now distributed as pods during cluster initiation. The redesign project will refresh the kubernetes rpms and position Fedora as a first class platform for upstream Kubernetes. Enterprise users of Kubernetes clusters may want to explore the capabilities and enhancements in OKD and Openshift. See https://www.okd.io/ for more information.
 
