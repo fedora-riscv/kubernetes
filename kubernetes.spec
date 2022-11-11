@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  e6f35974b08862a23e7f4aad8e5d7f7f2de26c15
+%global commit                  fdc77503e954d1ee641c0e350481f7528e8d068b
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.7
+Version:        1.24.8
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -382,6 +382,11 @@ fi
 
 ############################################
 %changelog
+* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
+- Update to 1.24.8
+- Resolves CVE-2022-3162: Unauthorized read of Custom Resources
+- Resolves CVE-2022-3294: Node address isn't always verified when proxying
+
 * Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.7-1
 - Update to 1.24.7. Resolves, in part, #2134622
 
@@ -548,6 +553,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
+- Update to 1.24.8
+
 * Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.7-1
 - Update to 1.24.7
 
