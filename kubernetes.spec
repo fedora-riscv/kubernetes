@@ -25,7 +25,7 @@
 ##############################################
 Name:           kubernetes
 Version:        1.24.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.18.8
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.18.8
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.5
+BuildRequires: golang >= 1.18.8
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -382,6 +382,9 @@ fi
 
 ############################################
 %changelog
+* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-2
+- Corrected golang built with version to 1.18.8
+
 * Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
 - Update to 1.24.8
 - Resolves CVE-2022-3162: Unauthorized read of Custom Resources
@@ -553,6 +556,9 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
+* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
+- Update to 1.24.8
+
 * Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
 - Update to 1.24.8
 
