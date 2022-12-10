@@ -6,10 +6,13 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 
 |Supported Kubernetes Version | Planned End of Life | Golang Built With |
 | :--- | --- | ---: |
+| 1.26 | 2024.02.24 | 1.19* |
 | 1.25 | 2023.10.27 | 1.19 |
 | 1.24   | 2023.07.28 | 1.18 |
 | 1.23 | 2023.02.28 | 1.17 |
 | 1.22 | 2022.10.28 | 1.16 |
+
+*Expect the version of go used for 1.26 to change.
 
 Kubernetes 1.23 did not make it into an official Fedora package. Unofficial packages for Fedora 36 and Fedora 37 can be found in COPR at https://copr.fedorainfracloud.org/coprs/buckaroogeek/copr-k8s-1.23/.
 
