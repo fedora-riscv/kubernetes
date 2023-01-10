@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  fdc77503e954d1ee641c0e350481f7528e8d068b
+%global commit                  9710807c82740b9799453677c977758becf0acbb
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,8 +24,8 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.8
-Release:        2%{?dist}
+Version:        1.24.9
+Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.18.8
+BuildRequires: golang >= 1.18.9
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.8
+BuildRequires: golang >= 1.18.9
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.8
+BuildRequires: golang >= 1.18.9
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -382,6 +382,11 @@ fi
 
 ############################################
 %changelog
+* Sat Dec 10 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.9-1
+- Update to 1.24.9
+- Remove duplicate changelog entries
+- Resolves CVE-2022-3162, CVE-2022-3294
+
 * Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-2
 - Corrected golang built with version to 1.18.8
 
@@ -556,18 +561,6 @@ fi
 
 * Thu Feb 08 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.1-4
 - Escape macro in %%changelog
-* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
-- Update to 1.24.8
-
-* Fri Nov 11 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.8-1
-- Update to 1.24.8
-
-* Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.7-1
-- Update to 1.24.7
-
-* Fri Oct 14 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.25.3-1
-- Update to 1.25.3
-
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
