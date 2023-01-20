@@ -5,7 +5,7 @@ The Kubernetes rpm repository. Forthcoming Kubernetes releases will be available
 Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the canonical source for upstream lifecycle plans and status. Information on this page may be dated. The golang version in the table below is the major:minor version used by upstream to build and test the release. The specific patch release can change.
 
 |Supported Kubernetes Version | Planned End of Life | Golang Built With | Target Fedora Release |
-| :--- | --- | ---: |
+| :--- | --- | --- | ---: |
 | 1.26 | 2024.02.24 | 1.19*<sup>1</sup> | F38 |
 | 1.25 | 2023.10.27 | 1.19 | F37 |
 | 1.24   | 2023.07.28 | 1.18/1.19 | F36/COPR<sup>2</sup> |
