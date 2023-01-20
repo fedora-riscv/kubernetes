@@ -6,15 +6,17 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 
 |Supported Kubernetes Version | Planned End of Life | Golang Built With | Target Fedora Release |
 | :--- | --- | --- | ---: |
-| 1.26 | 2024.02.24 | 1.19*<sup>1</sup> | F38 |
+| 1.26 | 2024.02.24 | 1.19*1 | F38 |
 | 1.25 | 2023.10.27 | 1.19 | F37 |
-| 1.24   | 2023.07.28 | 1.18/1.19 | F36/COPR<sup>2</sup> |
-| 1.23 | 2023.02.28 | 1.17, 1.19<sup>3</sup> | COPR |
+| 1.24   | 2023.07.28 | 1.18/1.19 | F36/COPR*2 |
+| 1.23 | 2023.02.28 | 1.17, 1.19*3 | COPR |
 | 1.22 | 2022.10.28 | 1.16 | F35 |
 
-<sup>1</sup>Expect the version of go used for 1.26 to change.
-<sup>2</sup>As of 1.24.10 Kubernetes is built with go 1.19.5. F36 provides go 1.18 so a COPR repository will provide future F36 updates.
-<sup>3</sup>As of version 1.23.15, now built with go 1.19.4.
+*1 Expect the version of go used for 1.26 to change.
+
+*2 As of 1.24.10 Kubernetes is built with go 1.19.5. F36 provides go 1.18 so a COPR repository will provide future F36 updates.
+
+*3 As of version 1.23.15, now built with go 1.19.4.
 
 Kubernetes 1.23 did not make it into an official Fedora package. Unofficial packages for Fedora 36 and Fedora 37 can be found in COPR at https://copr.fedorainfracloud.org/coprs/buckaroogeek/copr-k8s-1.23/.
 
