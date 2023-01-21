@@ -14,7 +14,7 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 
 *1 Expect the version of go used for 1.26 to change.
 
-*2 As of 1.24.10 Kubernetes is built with go 1.19.5. F36 provides go 1.18 so a COPR repository will provide future F36 updates.
+*2 As of 1.24.10 Kubernetes is built with go 1.19.5. F36 provides go 1.18 so a COPR repository will provide future F36 updates. The COPR repository with F36 updates based on go 1.19.x: https://copr.fedorainfracloud.org/coprs/buckaroogeek/copy-k8s-1.24/.
 
 *3 As of version 1.23.15, now built with go 1.19.4.
 
