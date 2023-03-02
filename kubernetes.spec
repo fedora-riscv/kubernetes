@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  ff2c119726cc1f8926fb0585c74b25921e866a28
+%global commit                  723bcdb232300aaf5e147ff19b4df7ec8a20278d
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.25.6
+Version:        1.25.7
 Release:        %autorelease
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.19.5
+BuildRequires: golang >= 1.19.6
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.19.5
+BuildRequires: golang >= 1.19.6
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.19.5
+BuildRequires: golang >= 1.19.6
 BuildRequires: go-bindata
 BuildRequires: make
 
