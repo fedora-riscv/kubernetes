@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  9710807c82740b9799453677c977758becf0acbb
+%global commit                  0f75679e3346160939924550fd3591462a4afec6
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.9
+Version:        1.24.11
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.18.9
+BuildRequires: golang >= 1.19.6
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.18.9
+BuildRequires: golang >= 1.19.6
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.18.9
+BuildRequires: golang >= 1.19.6
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -382,6 +382,13 @@ fi
 
 ############################################
 %changelog
+* Wed Mar 01 2023 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.11-1
+- Update to 1.24.11
+- Resolves # 2174606.
+- Fedora 36 now has golang 1.19 so updates to kubernetes 1.24 can continue.
+- There is a potential issue for upstream container images for this release. See https://groups.google.com/g/kubernetes-announce/c/0_jVjhLvNuI for more info.
+- See https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md#changelog-since-v12410 for change log.
+
 * Sat Dec 10 2022 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.9-1
 - Update to 1.24.9
 - Remove duplicate changelog entries
