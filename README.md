@@ -9,17 +9,15 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 | 1.26 | 2024.02.24 | 1.19*1 | F39 |
 | 1.26 | 2024.02.24 | 1.19*1 | F38 |
 | 1.25 | 2023.10.27 | 1.19 | F37 |
-| 1.24   | 2023.07.28 | 1.18/1.19 | F36/COPR*2 |
+| 1.24   | 2023.07.28 | 1.18/1.19 | F36*2 |
 | 1.23 | 2023.02.28 | 1.17, 1.19*3 | COPR |
-| 1.22 | 2022.10.28 | 1.16 | F35 |
+| 1.22 | 2022.10.28 | 1.16 | EOL |
 
 *1 Expect the version of go used for 1.26 to change.
 
-*2 As of 1.24.10 Kubernetes is built with go 1.19.5. F36 provides go 1.18 so a COPR repository will provide future F36 updates. The COPR repository with F36 updates based on go 1.19.x: https://copr.fedorainfracloud.org/coprs/buckaroogeek/copy-k8s-1.24/.
+*2 As of v.1.24.10 Kubernetes is built with go 1.19.x. F36 originally provided go 1.18 blocking this and future Kubernetes updates. Go 1.19 was approved for F36 so starting with Kubernetes 1.24.11 (K8S 1.24.10 is available at https://copr.fedorainfracloud.org/coprs/buckaroogeek/copy-k8s-1.24/ if needed).
 
-*3 As of version 1.23.15, now built with go 1.19.4.
+*3 As of version 1.23.15, now built with go 1.19.4 or newer.
 
 Kubernetes 1.23 did not make it into an official Fedora package. Unofficial packages for Fedora 36 and Fedora 37 can be found in COPR at https://copr.fedorainfracloud.org/coprs/buckaroogeek/copr-k8s-1.23/.
-
-As of August 2022, there is a project to redesign the kubernetes spec file. The repository for this project is at https://github.com/buckaroogeek/copr-k8s-refresh. The corresponding COPR site is https://copr.fedorainfracloud.org/coprs/buckaroogeek/Kubernetes-Refresh/. The existing spec file includes several software components that are now distributed as pods during cluster initiation. The redesign project will refresh the kubernetes rpms and position Fedora as a first class platform for upstream Kubernetes. Enterprise users of Kubernetes clusters may want to explore the capabilities and enhancements in OKD and Openshift. See https://www.okd.io/ for more information.
 
