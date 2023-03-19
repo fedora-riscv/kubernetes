@@ -154,6 +154,11 @@ done
 mkdir -p src/k8s.io/kubernetes
 mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 
+# mv command above skips all dot files. Move .generated_files and all
+#.go* files
+mv .generated_files src/k8s.io/kubernetes/.
+mv .go* src/k8s.io/kubernetes/.
+
 ###############
 
 %build
