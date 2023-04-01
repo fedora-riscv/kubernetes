@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  0f75679e3346160939924550fd3591462a4afec6
+%global commit                  ef70d260f3d036fc22b30538576bbf6b36329995
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.11
+Version:        1.24.12
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.19.6
+BuildRequires: golang >= 1.19.7
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.19.6
+BuildRequires: golang >= 1.19.7
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.19.6
+BuildRequires: golang >= 1.19.7
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -154,9 +154,22 @@ done
 mkdir -p src/k8s.io/kubernetes
 mv $(ls | grep -v "^src$") src/k8s.io/kubernetes/.
 
+# mv command above skips all dot files. Move .generated_files and all
+#.go* files
+mv .generated_files src/k8s.io/kubernetes/.
+mv .go* src/k8s.io/kubernetes/.
+
 ###############
 
 %build
+
+# With K*S 1.26.3/1.25.8/1.24.12 upstream now builds with an explicit
+# version of go and will try to fetch that version if not present.
+# FORCE_HOTS_GO=y overrides that specification by using the host's
+# version of go. This spec file continues to use built requires to
+# require as a minimum the 'built with' go version from upstream.
+export FORCE_HOST_GO=y
+
 pushd src/k8s.io/kubernetes/
 source hack/lib/init.sh
 kube::golang::setup_env
@@ -382,6 +395,11 @@ fi
 
 ############################################
 %changelog
+* Sat Mar 18 2023 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.12-1
+- Update to 1.24.12
+- Resolves, in part, #2179470.
+- Upstream bug fixes - see https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md#changelog-since-v12411
+
 * Wed Mar 01 2023 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.11-1
 - Update to 1.24.11
 - Resolves # 2174606.
