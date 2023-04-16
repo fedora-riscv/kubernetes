@@ -15,7 +15,7 @@
 
 %global provider_prefix         %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path             k8s.io/kubernetes
-%global commit                  ef70d260f3d036fc22b30538576bbf6b36329995
+%global commit                  49433308be5b958856b6949df02b716e0a7cf0a3
 %global shortcommit              %(c=%{commit}; echo ${c:0:7})
 
 # Needed otherwise "version_ldflags=$(kube::version_ldflags)" doesn't work
@@ -24,7 +24,7 @@
 
 ##############################################
 Name:           kubernetes
-Version:        1.24.12
+Version:        1.24.13
 Release:        1%{?dist}
 Summary:        Container cluster management
 License:        ASL 2.0
@@ -66,7 +66,7 @@ Requires: kubernetes-node = %{version}-%{release}
 %package master
 Summary: Kubernetes services for control plane host
 
-BuildRequires: golang >= 1.19.7
+BuildRequires: golang >= 1.19.8
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -90,7 +90,7 @@ Requires: (containerd or cri-o)
 Suggests: containerd
 Requires: conntrack-tools
 
-BuildRequires: golang >= 1.19.7
+BuildRequires: golang >= 1.19.8
 BuildRequires: systemd
 BuildRequires: rsync
 BuildRequires: go-md2man
@@ -122,7 +122,7 @@ Kubernetes tool for standing up clusters
 %package client
 Summary: Kubernetes client tools
 
-BuildRequires: golang >= 1.19.7
+BuildRequires: golang >= 1.19.8
 BuildRequires: go-bindata
 BuildRequires: make
 
@@ -395,6 +395,11 @@ fi
 
 ############################################
 %changelog
+* Sun Apr 16 2023 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.13-1
+- Update to 1.24.13
+- Resolves in part #2186369.
+- Upstream bug fixes. Changelog at https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md#changelog-since-v12412
+
 * Sat Mar 18 2023 Bradley G Smith <bradley.g.smith@gmail.com> - 1.24.12-1
 - Update to 1.24.12
 - Resolves, in part, #2179470.
