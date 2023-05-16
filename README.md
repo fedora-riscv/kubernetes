@@ -9,9 +9,9 @@ Kubernetes releases are tracked at https://kubernetes.io/releases/ and is the ca
 | 1.27 | F39 | 2024.06.28 | 1.20 |
 | 1.26 | F38 | 2024.02.24 | 1.19*1 |
 | 1.25 | F37 | 2023.10.27 | 1.19 |
-| 1.24   | F36*2 | 2023.07.28 | 1.18/1.19 |
-| 1.23 | EOL | 2023.02.28 | 1.17, 1.19*3 |
-| 1.22 | EOL | 2022.10.28 | 1.16 |
+| 1.24   | F36*2-EOL | 2023.07.28 | 1.18/1.19 |
+| 1.23 | COPR-EOL | 2023.02.28 | 1.17, 1.19*3 |
+| 1.22 | F35-EOL | 2022.10.28 | 1.16 |
 
 *1 Expect the version of go used for 1.26 to change.
 
