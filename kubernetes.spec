@@ -25,11 +25,11 @@
 ##############################################
 Name:           kubernetes
 Version:        1.26.4
-Release:        %autorelease
+Release:        %autorelease -e rv64
 Summary:        Container cluster management
 License:        ASL 2.0
 URL:            https://%{import_path}
-ExclusiveArch:  x86_64 aarch64 ppc64le s390x %{arm}
+ExclusiveArch:  x86_64 aarch64 ppc64le s390x %{arm} riscv64
 Source0:        https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 Source101:      kube-proxy.service
@@ -50,6 +50,9 @@ Source115:      kubernetes.conf
 Source116:      %{name}.sysusers
 
 Patch3:         build-with-debug-info.patch
+
+# riscv64 support from Arch Linux riscv project
+Patch10:        add-riscv64-support.patch
 
 # It obsoletes cadvisor but needs its source code (literally integrated)
 Obsoletes:      cadvisor
@@ -136,6 +139,10 @@ Kubernetes client tools like kubectl
 
 %if 0%{?with_debug}
 %patch3 -p1
+%endif
+
+%ifarch riscv64
+%patch -P10 -p1
 %endif
 
 # src/k8s.io/kubernetes/pkg/util/certificates
